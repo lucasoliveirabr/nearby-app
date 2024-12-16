@@ -1,6 +1,8 @@
 import { useRef } from "react";
 import { Text, useWindowDimensions } from "react-native";
+import { router } from "expo-router";
 import BottomSheet, { BottomSheetFlatList } from "@gorhom/bottom-sheet";
+
 import { styles } from "./styles";
 import { Place, type PlaceProps } from "../place";
 
@@ -29,7 +31,12 @@ export function Places({ data }: PlacesProps) {
       <BottomSheetFlatList
         data={data}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <Place data={item} />}
+        renderItem={({ item }) => (
+          <Place
+            data={item}
+            onPress={() => router.navigate(`/establishment/${item.id}`)}
+          />
+        )}
         contentContainerStyle={styles.content}
         ListHeaderComponent={() => (
           <Text style={styles.title}>Explore locais perto de você</Text>
