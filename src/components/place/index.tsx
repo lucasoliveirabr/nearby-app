@@ -25,7 +25,7 @@ export function Place({ data, ...rest }: Props) {
         <Text style={styles.name}>
           {data.name}
         </Text>
-        <Text style={styles.description}>
+        <Text style={styles.description} numberOfLines={2}>
           {data.description}
         </Text>
 
