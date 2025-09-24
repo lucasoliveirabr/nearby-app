@@ -3,33 +3,33 @@ import { styles } from "./styles";
 import { Category } from "../category";
 
 export type CategoriesProps = {
-  id: string;
-  name: string;
-}[]
+	id: string;
+	name: string;
+}[];
 
 type Props = {
-  data: CategoriesProps;
-  selected: string;
-  onSelect: (id: string) => void;
-}
+	data: CategoriesProps;
+	selected: string;
+	onSelect: (id: string) => void;
+};
 
 export function Categories({ data, selected, onSelect }: Props) {
-  return (
-    <FlatList
-      data={data}
-      keyExtractor={(item) => item.id}
-      renderItem={({ item }) => (
-        <Category
-          name={item.name}
-          iconId={item.id}
-          onPress={() => onSelect(item.id)}
-          isSelected={item.id === selected}
-        />
-      )}
-      horizontal
-      showsHorizontalScrollIndicator={false}
-      contentContainerStyle={styles.content}
-      style={styles.container}
-    />
-  )
+	return (
+		<FlatList
+			data={data}
+			keyExtractor={(item) => item.id}
+			renderItem={({ item }) => (
+				<Category
+					name={item.name}
+					iconId={item.id}
+					onPress={() => onSelect(item.id)}
+					isSelected={item.id === selected}
+				/>
+			)}
+			horizontal
+			showsHorizontalScrollIndicator={false}
+			contentContainerStyle={styles.content}
+			style={styles.container}
+		/>
+	);
 }

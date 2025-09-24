@@ -6,12 +6,7 @@
 	},
 	"files": {
 		"ignoreUnknown": false,
-		"includes": [
-			"**",
-			"!.expo",
-			"!android",
-			"!ios"
-		]
+		"includes": ["**", "!.expo", "!android", "!ios"]
 	},
 	"assist": {
 		"enabled": true,

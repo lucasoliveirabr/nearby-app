@@ -1,26 +1,31 @@
-import { Text, Pressable, PressableProps } from "react-native";
+import { Text, Pressable, type PressableProps } from "react-native";
 import { styles } from "./styles";
 import { colors } from "@/styles/theme";
 import { categoriesIcons } from "@/utils/categories-icons";
 
 type CategoryProps = PressableProps & {
-  name: string;
-  iconId: string;
-  isSelected?: boolean;
-}
+	name: string;
+	iconId: string;
+	isSelected?: boolean;
+};
 
-export function Category({ name, iconId, isSelected = false, ...rest }: CategoryProps) {
-  const Icon = categoriesIcons[iconId];
+export function Category({
+	name,
+	iconId,
+	isSelected = false,
+	...rest
+}: CategoryProps) {
+	const Icon = categoriesIcons[iconId];
 
-  return (
-    <Pressable
-      style={[styles.container, isSelected && styles.containerSelected]}
-      {...rest}
-    >
-      <Icon size={16} color={colors.gray[isSelected ? 100 : 400]} />
-      <Text style={[styles.name, isSelected && styles.nameSelected]}>
-        {name}
-      </Text>
-    </Pressable>
-  )
+	return (
+		<Pressable
+			style={[styles.container, isSelected && styles.containerSelected]}
+			{...rest}
+		>
+			<Icon size={16} color={colors.gray[isSelected ? 100 : 400]} />
+			<Text style={[styles.name, isSelected && styles.nameSelected]}>
+				{name}
+			</Text>
+		</Pressable>
+	);
 }

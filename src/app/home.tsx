@@ -10,101 +10,117 @@ import { Places } from "@/components/places";
 import type { PlaceProps } from "@/components/place";
 
 type EstablishmentProps = PlaceProps & {
-  latitude: number;
-  longitude: number;
+	latitude: number;
+	longitude: number;
 };
 
 const currentLocation = {
-  latitude: -23.561187293883442,
-  longitude: -46.656451388116494,
+	latitude: -23.561187293883442,
+	longitude: -46.656451388116494,
 };
 
 export default function Home() {
-  const [categories, setCategories] = useState<CategoriesProps>([]);
-  const [category, setCategory] = useState<string>("");
-  const [establishments, setEstablishments] = useState<EstablishmentProps[]>([]);
+	const [categories, setCategories] = useState<CategoriesProps>([]);
+	const [category, setCategory] = useState<string>("");
+	const [establishments, setEstablishments] = useState<EstablishmentProps[]>(
+		[],
+	);
 
-  async function fetchCategories() {
-    try {
-      const { data } = await api.get("/categories");
-      setCategories(data);
-      setCategory(data[0].id);
-    } catch (error) {
-      Alert.alert("Categorias", "Não foi possível carregar as categorias.");
-    }
-  }
+	useEffect(() => {
+		async function fetchCategories() {
+			try {
+				const { data } = await api.get("/categories");
+				setCategories(data);
+				setCategory(data[0].id);
+			} catch (_error) {
+				Alert.alert("Categorias", "Não foi possível carregar as categorias.");
+			}
+		}
 
-  async function fetchEstablishments() {
-    try {
-      if (!category) return;
+		fetchCategories();
+	}, []);
 
-      const { data } = await api.get(`/markets/category/${category}`);
-      setEstablishments(data);
-    } catch (error) {
-      Alert.alert("Locais", "Não foi possível carregar os locais.");
-    }
-  }
+	useEffect(() => {
+		async function fetchEstablishments() {
+			try {
+				if (!category) return;
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
+				const { data } = await api.get(`/markets/category/${category}`);
+				setEstablishments(data);
+			} catch (_error) {
+				Alert.alert("Locais", "Não foi possível carregar os locais.");
+			}
+		}
 
-  useEffect(() => {
-    fetchEstablishments();
-  }, [category]);
+		fetchEstablishments();
+	}, [category]);
 
-  return (
-    <View style={{ flex: 1, backgroundColor: "#CECECE" }}>
-      <Categories
-        data={categories}
-        onSelect={setCategory}
-        selected={category}
-      />
+	return (
+		<View style={{ flex: 1, backgroundColor: "#CECECE" }}>
+			<Categories
+				data={categories}
+				onSelect={setCategory}
+				selected={category}
+			/>
 
-      <MapView
-        provider={PROVIDER_GOOGLE}
-        style={{ flex: 1 }}
-        initialRegion={{
-          latitude: currentLocation.latitude,
-          longitude: currentLocation.longitude,
-          latitudeDelta: 0.01,
-          longitudeDelta: 0.01,
-        }}
-      >
-        <Marker
-          identifier="current"
-          coordinate={{
-            latitude: currentLocation.latitude,
-            longitude: currentLocation.longitude,
-          }}
-          image={require("@/assets/location.png")}
-        />
+			<MapView
+				provider={PROVIDER_GOOGLE}
+				style={{ flex: 1 }}
+				initialRegion={{
+					latitude: currentLocation.latitude,
+					longitude: currentLocation.longitude,
+					latitudeDelta: 0.01,
+					longitudeDelta: 0.01,
+				}}
+			>
+				<Marker
+					identifier="current"
+					coordinate={{
+						latitude: currentLocation.latitude,
+						longitude: currentLocation.longitude,
+					}}
+					image={require("@/assets/location.png")}
+				/>
 
-        {establishments.map((item) => (
-          <Marker
-            key={item.id}
-            identifier={item.id}
-            coordinate={{
-              latitude: item.latitude,
-              longitude: item.longitude,
-            }}
-            image={require("@/assets/pin.png")}
-          >
-            <Callout onPress={() => router.navigate(`/establishment/${item.id}`)}>
-              <View>
-                <Text style={{ fontSize: 14, color: colors.gray[600], fontFamily: fontFamily.medium }}>
-                  {item.name}
-                </Text>
-                <Text style={{ fontSize: 12, color: colors.gray[600], fontFamily: fontFamily.regular }}>
-                  {item.address}
-                </Text>
-              </View>
-            </Callout>
-          </Marker>
-        ))}
-      </MapView>
+				{establishments.map((item) => (
+					<Marker
+						key={item.id}
+						identifier={item.id}
+						coordinate={{
+							latitude: item.latitude,
+							longitude: item.longitude,
+						}}
+						image={require("@/assets/pin.png")}
+					>
+						<Callout
+							onPress={() => router.navigate(`/establishment/${item.id}`)}
+						>
+							<View>
+								<Text
+									style={{
+										fontSize: 14,
+										color: colors.gray[600],
+										fontFamily: fontFamily.medium,
+									}}
+								>
+									{item.name}
+								</Text>
+								<Text
+									style={{
+										fontSize: 12,
+										color: colors.gray[600],
+										fontFamily: fontFamily.regular,
+									}}
+								>
+									{item.address}
+								</Text>
+							</View>
+						</Callout>
+					</Marker>
+				))}
+			</MapView>
 
-      <Places data={establishments} />
-    </View>
-  )
+			<Places data={establishments} />
+		</View>
+	);
 }
