@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Alert, View, Text } from "react-native";
 import { router } from "expo-router";
-import MapView, { Callout, Marker } from "react-native-maps";
+import MapView, { Callout, Marker, PROVIDER_GOOGLE } from "react-native-maps";
 
 import { api } from "@/services/api";
 import { fontFamily, colors } from "@/styles/theme";
@@ -62,6 +62,7 @@ export default function Home() {
       />
 
       <MapView
+        provider={PROVIDER_GOOGLE}
         style={{ flex: 1 }}
         initialRegion={{
           latitude: currentLocation.latitude,
